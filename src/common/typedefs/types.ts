@@ -4,7 +4,8 @@ export const Code = z.object({
     codeId: z.string().min(1),
     code: z.string().min(1),
     input: z.number(),
-    language: z.enum(['cpp', 'js', 'py'])
+    language: z.enum(['cpp', 'js', 'py']),
+    callbackUrl: z.string().min(1)
 });
 
 export type CodeI = z.infer<typeof Code>;
