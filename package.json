@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -p .",
-    "dev-server": "nodemon src/server/index.ts"
+    "dev-server": "nodemon src/server/index.ts",
+    "dev-worker": "nodemon src/worker/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -18,8 +19,10 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
+    "bullmq": "^5.8.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "ioredis": "^5.4.1",
     "zod": "^3.23.8"
   }
 }
