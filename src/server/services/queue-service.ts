@@ -1,4 +1,4 @@
-import { Job, Queue } from 'bullmq';
+import { Job } from 'bullmq';
 import { CodeI } from '../../common/typedefs/types';
 import { queue } from '../../common/utils/redis';
 
