@@ -1,2 +1,7 @@
-export const SUPPORTED_LANGUAGES = ['cpp', 'js', 'py'];
-export const LANGUAGES_REQUIRE_BUILD = ['cpp'];
+const constants = {
+    SUPPORTED_LANGUAGES: ['cpp', 'js', 'py'],
+    LANGUAGES_REQUIRE_BUILD: ['cpp'],
+    CODE_QUEUE_NAME: process.env.CODE_QUEUE_NAME!
+}
+
+export default constants;

@@ -1,5 +1,6 @@
 import Redis from 'ioredis';
 import { Queue } from 'bullmq';
+import constants from '../../constants';
 
 const globalForRedis = global as unknown as {
     redis: Redis
@@ -12,7 +13,7 @@ export const redis =
 
 export const queue =
     globalForRedis.queue ??
-    new Queue(process.env.REDIS_QUEUE_NAME!);
+    new Queue(constants.CODE_QUEUE_NAME);
 
 if (process.env.NODE_ENV !== 'PROD') {
     globalForRedis.redis = redis;
