@@ -1,7 +1,6 @@
 import { Job, Queue } from 'bullmq';
 import { CodeI } from '../../common/typedefs/types';
-
-const queue = new Queue(process.env.REDIS_QUEUE_NAME!);
+import { queue } from '../../common/utils/redis';
 
 export class QueueService {
     constructor() {}
