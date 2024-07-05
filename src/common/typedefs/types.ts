@@ -8,4 +8,9 @@ export const Code = z.object({
     callbackUrl: z.string().min(1)
 });
 
+export interface Output {
+    output: string
+    success: boolean
+}
+
 export type CodeI = z.infer<typeof Code>;
