@@ -6,7 +6,8 @@ Judge1 is a code execution engine that can run C++, JavaScript, and Python code 
 
 ## System Design
 
-Insert gif or link to demo
+![image](https://github.com/user-attachments/assets/f6ec3c75-d297-4f17-ad69-894a91e4d416)
+
 
 
 ## Demo
