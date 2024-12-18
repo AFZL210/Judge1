@@ -6,7 +6,12 @@
   "scripts": {
     "build": "tsc -p .",
     "server": "node ./dist/server/index.js",
-    "dev-server": "nodemon ./src/server/index.ts"
+    "dev-server": "nodemon ./src/server/index.ts",
+    "prisma-client": "npm install @prisma/client",
+    "prisma-generate": "npx prisma generate",
+    "prisma-migrate": "npx prisma migrate dev",
+    "prisma-migrate-push": "npx prisma db push",
+    "prisma-studio": "npx prisma studio"
   },
   "author": "",
   "license": "ISC",
@@ -14,10 +19,13 @@
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.2",
     "nodemon": "^3.1.9",
+    "prisma": "^6.1.0",
     "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "@prisma/client": "^6.1.0",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
