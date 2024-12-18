@@ -1,5 +1,7 @@
 import { ZodError } from "zod";
 
+export type ErrorI = string | ZodError | Error;
+
 class CustomError extends Error {
     status: number;
   
@@ -9,7 +11,7 @@ class CustomError extends Error {
     }
 }
   
-const createError = (error: string | ZodError | Error = 'Something went wrong', status: number = 400): CustomError => {
+const createError = (error: ErrorI = 'Something went wrong', status: number = 400): CustomError => {
   let errorMessage;
   let errorStatus: number = status;
 
