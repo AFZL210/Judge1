@@ -13,7 +13,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum CodeStatus {
+  COMPILATION_ERROR
+  TLE
+  RUNNING
+  COMPLETED
+}
+
+model User {
+  id         Int    @id @default(autoincrement())
+  username   String
+  auth_token String @default(uuid())
+  codes      Code[]
+}
+
 model Code {
-  id Int @id @default(autoincrement())
-  name String
+  id         String     @id @default(uuid())
+  code       String
+  input      String     @default("")
+  lang       String
+  status     CodeStatus @default(RUNNING)
+  created_at DateTime   @default(now())
+  user_id    Int
+  user       User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([lang])
 }
