@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import prisma from "../../common/utils/db";
 import createError, { ErrorI } from "../../common/utils/error";
 import { CodeSchema, Code } from "../../common/typedefs/types";
+import { queue } from "../../common/utils/queue";
 
 export const executeCode = async (
   req: Request,
@@ -23,6 +24,8 @@ export const executeCode = async (
         ...code,
       },
     });
+
+    await queue.add(`code-job-${savedCode.id}`, savedCode);
 
     res
       .json({
