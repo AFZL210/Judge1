@@ -18,5 +18,17 @@ export const UserSchema = z.object({
   auth_token: z.string().min(1),
 });
 
+export interface CodeJob {
+  id: string;
+  code: string;
+  input: string;
+  lang: string;
+  execution_time: number;
+  status: CodeSatatusEnum
+  created_at: string;
+  user_id: number;
+}
+
+
 export type Code = z.infer<typeof CodeSchema>;
 export type User = z.infer<typeof UserSchema>;
