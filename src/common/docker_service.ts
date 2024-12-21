@@ -63,13 +63,18 @@ class DockerService {
   }
 
   async executeCode() {
-    const container = await this.createContainer();
-    await container.start();
-    await container.wait();
-    const logs = (
-      await container.logs({ stdout: true, stderr: true })
-    ).toString();
-    console.log(logs);
+    try {
+      const container = await this.createContainer();
+      await container.start();
+      await container.wait();
+      const logs = (
+        await container.logs({ stdout: true, stderr: true })
+      ).toString();
+      console.log(logs);
+      await container.remove();
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 

@@ -12,8 +12,6 @@ const jobHandler = async (job: Job) => {
   
   dockerService.setCode(data);
   dockerService.executeCode();
-
-  console.log(data);
 };
 
 const codeRunner = new Worker(constants.CODE_QUEUE, jobHandler, { connection: {} });
