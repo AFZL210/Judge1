@@ -1,5 +1,6 @@
 import Docker, { Container, ContainerCreateOptions } from "dockerode";
 import { CodeJob } from "./typedefs/types";
+import * as constants from "../constants";
 
 class DockerService {
   code: CodeJob;
@@ -66,14 +67,24 @@ class DockerService {
     try {
       const container = await this.createContainer();
       await container.start();
+
+      const tle = setTimeout(async () => {
+        await container.stop();
+        throw new Error("TLE");
+      }, constants.TLE_TIME_IN_SEC * 1000);
+
       await container.wait();
+      clearTimeout(tle);
+
       const logs = (
         await container.logs({ stdout: true, stderr: true })
       ).toString();
+
       console.log(logs);
+
       await container.remove();
     } catch (e) {
-      console.log(e);
+      console.log((e as Error).message);
     }
   }
 }
