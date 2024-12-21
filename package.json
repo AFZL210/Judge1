@@ -19,6 +19,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/dockerode": "^3.3.32",
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.2",
     "nodemon": "^3.1.9",
@@ -32,6 +33,7 @@
     "@prisma/client": "^6.1.0",
     "axios": "^1.7.9",
     "bullmq": "^5.34.4",
+    "dockerode": "^4.0.2",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "zod": "^3.24.1"

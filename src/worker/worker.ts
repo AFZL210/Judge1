@@ -3,10 +3,16 @@ dotenv.config();
 import { Job, Worker } from "bullmq";
 import * as constants from "../constants";
 import { CodeJob } from "../common/typedefs/types";
+import DockerService from "../common/docker_service";
+
+const dockerService = new DockerService();
 
 const jobHandler = async (job: Job) => {
   const data: CodeJob = job.data;
+  
+  dockerService.setCode(data);
+
   console.log(data);
 };
 
-const worker = new Worker(constants.CODE_QUEUE, jobHandler, { connection: {} });
+const codeRunner = new Worker(constants.CODE_QUEUE, jobHandler, { connection: {} });
