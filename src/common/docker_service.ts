@@ -51,7 +51,7 @@ class DockerService {
     return cmd;
   }
 
-  async createContainer(): Promise<void> {
+  private async createContainer(): Promise<Container> {
     const containerConfig: ContainerCreateOptions = {
       Image: this.getImage(),
       Cmd: this.getExecutionCommand(),
@@ -59,6 +59,17 @@ class DockerService {
     };
 
     const container = await this.docker.createContainer(containerConfig);
+    return container;
+  }
+
+  async executeCode() {
+    const container = await this.createContainer();
+    await container.start();
+    await container.wait();
+    const logs = (
+      await container.logs({ stdout: true, stderr: true })
+    ).toString();
+    console.log(logs);
   }
 }
 

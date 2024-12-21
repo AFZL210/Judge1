@@ -11,6 +11,7 @@ const jobHandler = async (job: Job) => {
   const data: CodeJob = job.data;
   
   dockerService.setCode(data);
+  dockerService.executeCode();
 
   console.log(data);
 };
