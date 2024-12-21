@@ -28,14 +28,15 @@ model User {
 }
 
 model Code {
-  id         String     @id @default(uuid())
-  code       String
-  input      String     @default("")
-  lang       String
-  status     CodeStatus @default(RUNNING)
-  created_at DateTime   @default(now())
-  user_id    Int
-  user       User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  id             String     @id @default(uuid())
+  code           String
+  input          String     @default("")
+  lang           String
+  execution_time Int        @default(0)
+  status         CodeStatus @default(RUNNING)
+  created_at     DateTime   @default(now())
+  user_id        Int
+  user           User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@index([lang])
 }
