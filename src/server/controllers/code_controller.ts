@@ -1,28 +1,36 @@
 import { Request, Response, NextFunction } from "express";
-import prisma from '../../common/utils/db';
-import createError, {ErrorI} from "../../common/utils/error";
+import prisma from "../../common/utils/db";
+import createError, { ErrorI } from "../../common/utils/error";
 import { CodeSchema, Code } from "../../common/typedefs/types";
 
-export const executeCode = async (req: Request, res: Response, next: NextFunction) => {
+export const executeCode = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { code } = req.body;
-    const userId = req.get('judge1UserId');
+    const userId = req.get("judge1UserId");
     CodeSchema.parse(code);
 
-    await prisma.code.create({
+    const savedCode = await prisma.code.create({
       data: {
         user: {
           connect: {
-            id: parseInt(userId!)
-          }
+            id: parseInt(userId!),
+          },
         },
-        ...code
-      }
+        ...code,
+      },
     });
 
-    res.json({data: null, msg: 'Pushed code in execution queue'}).status(201);
-  }
-  catch(e) {
+    res
+      .json({
+        data: { submission_id: savedCode.id },
+        msg: "Pushed code in execution queue",
+      })
+      .status(201);
+  } catch (e) {
     next(createError(e as ErrorI));
   }
-}
+};

@@ -1,0 +1,10 @@
+# Ignore artifacts:
+build
+coverage
+node_modules
+prisma
+package-lock.json
+package.json
+.env
+.env.example
+README.md
