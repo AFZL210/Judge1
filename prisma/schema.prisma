@@ -31,6 +31,7 @@ model Code {
   id             String     @id @default(uuid())
   code           String
   input          String     @default("")
+  output         String     @default("")
   lang           String
   execution_time Int        @default(0)
   status         CodeStatus @default(RUNNING)

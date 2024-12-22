@@ -6,10 +6,14 @@ import prisma from "./utils/db";
 class DockerService {
   code: CodeJob;
   docker: Docker;
+  output: string;
+  status: CodeSatatusEnum;
 
   constructor() {
     this.code = {} as CodeJob;
     this.docker = new Docker();
+    this.output = "";
+    this.status = CodeSatatusEnum.Running;
   }
 
   public setCode(code: CodeJob): void {
@@ -64,13 +68,14 @@ class DockerService {
     return container;
   }
 
-  private async updateCodeStatus(status: CodeSatatusEnum): Promise<void> {
+  private async updateCodeData(): Promise<void> {
     await prisma.code.update({
       where: {
         id: this.code.id,
       },
       data: {
-        status: status,
+        status: this.status,
+        output: this.output
       },
     });
   }
@@ -78,7 +83,6 @@ class DockerService {
   async executeCode(): Promise<string> {
     let container: Container | null = null;
     let logs = "";
-    let status: CodeSatatusEnum = CodeSatatusEnum.Running;
 
     try {
       container = await this.createContainer();
@@ -101,15 +105,16 @@ class DockerService {
 
       if (timeoutReached) {
         logs = "";
-        status = CodeSatatusEnum.Tle;
+        this.status = CodeSatatusEnum.Tle;
       } else {
-        status = CodeSatatusEnum.Completed;
+        this.status = CodeSatatusEnum.Completed;
         logs = (
           await container.logs({ stdout: true, stderr: true })
         ).toString();
       }
 
-      await this.updateCodeStatus(status);
+      this.output = logs;
+      await this.updateCodeData();
     } catch (error) {
       console.error("Error executing code:", error);
     } finally {
