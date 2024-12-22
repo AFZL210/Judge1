@@ -1,6 +1,7 @@
 import Docker, { Container, ContainerCreateOptions } from "dockerode";
-import { CodeJob } from "./typedefs/types";
+import { CodeJob, CodeSatatusEnum } from "./typedefs/types";
 import * as constants from "../constants";
+import prisma from "./utils/db";
 
 class DockerService {
   code: CodeJob;
@@ -63,28 +64,56 @@ class DockerService {
     return container;
   }
 
-  async executeCode() {
+  private async updateCodeStatus(status: CodeSatatusEnum): Promise<void> {
+    await prisma.code.update({
+      where: {
+        id: this.code.id,
+      },
+      data: {
+        status: status,
+      },
+    });
+  }
+
+  async executeCode(): Promise<string> {
+    let container: Container | null = null;
+    let logs = "";
+    let status: CodeSatatusEnum = CodeSatatusEnum.Running;
+
     try {
-      const container = await this.createContainer();
+      container = await this.createContainer();
       await container.start();
 
+      let timeoutReached = false;
       const tle = setTimeout(async () => {
-        await container.stop();
-        throw new Error("TLE");
+        timeoutReached = true;
+        if (container) {
+          try {
+            await container.stop();
+          } catch (stopError) {
+            console.error("Error stopping container on timeout:", stopError);
+          }
+        }
       }, constants.TLE_TIME_IN_SEC * 1000);
 
       await container.wait();
       clearTimeout(tle);
 
-      const logs = (
-        await container.logs({ stdout: true, stderr: true })
-      ).toString();
+      if (timeoutReached) {
+        logs = "";
+        status = CodeSatatusEnum.Tle;
+      } else {
+        status = CodeSatatusEnum.Completed;
+        logs = (
+          await container.logs({ stdout: true, stderr: true })
+        ).toString();
+      }
 
-      console.log(logs);
-
-      await container.remove();
-    } catch (e) {
-      console.log((e as Error).message);
+      await this.updateCodeStatus(status);
+    } catch (error) {
+      console.error("Error executing code:", error);
+    } finally {
+      return logs;
     }
   }
 }

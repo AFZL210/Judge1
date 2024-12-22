@@ -25,7 +25,7 @@ if (cluster.isPrimary) {
     const data: CodeJob = job.data;
 
     dockerService.setCode(data);
-    dockerService.executeCode();
+    await dockerService.executeCode();
   };
 
   const codeRunner = new Worker(constants.CODE_QUEUE, jobHandler, {
