@@ -4,14 +4,31 @@ import { Job, Worker } from "bullmq";
 import * as constants from "../constants";
 import { CodeJob } from "../common/typedefs/types";
 import DockerService from "../common/docker_service";
+import cluster from "cluster";
+import os from "os";
 
-const dockerService = new DockerService();
+const workerCount = Math.min(os.availableParallelism(), constants.MAX_WORKERS);
 
-const jobHandler = async (job: Job) => {
-  const data: CodeJob = job.data;
-  
-  dockerService.setCode(data);
-  dockerService.executeCode();
-};
+if (cluster.isPrimary) {
+  for (let i = 0; i < workerCount; i++) {
+    cluster.fork();
+  }
 
-const codeRunner = new Worker(constants.CODE_QUEUE, jobHandler, { connection: {} });
+  cluster.on("exit", (worker, code, signal) => {
+    console.log(`worker ${worker.process.pid} died`);
+  });
+} else {
+  console.log(`worker ${process.pid} started`);
+  const dockerService = new DockerService();
+
+  const jobHandler = async (job: Job) => {
+    const data: CodeJob = job.data;
+
+    dockerService.setCode(data);
+    dockerService.executeCode();
+  };
+
+  const codeRunner = new Worker(constants.CODE_QUEUE, jobHandler, {
+    connection: {},
+  });
+}
