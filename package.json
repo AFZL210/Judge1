@@ -6,8 +6,10 @@
   "scripts": {
     "build": "tsc -p .",
     "server": "node ./dist/server/index.js",
+    "dev-client-server": "nodemon ./src/client_server.ts",
+    "client-server": "node ./dist/client_server.ts",
     "dev-server": "nodemon ./src/server/index.ts",
-    "worker": "node ./src/worker/worker.ts",
+    "worker": "node ./dist/worker/worker.ts",
     "dev-worker": "ts-node ./src/worker/worker.ts",
     "prisma-client": "npm install @prisma/client",
     "prisma-generate": "npx prisma generate",

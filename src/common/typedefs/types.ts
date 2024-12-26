@@ -20,6 +20,7 @@ export const UserSchema = z.object({
 
 export interface CodeJob {
   id: string;
+  callback_url: string
   code: string;
   input: string;
   lang: string;

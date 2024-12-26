@@ -10,7 +10,8 @@ export const executeCode = async (
   next: NextFunction,
 ) => {
   try {
-    const { code } = req.body;
+    const { code, callback_url }: { code: Code; callback_url: string } =
+      req.body;
     const userId = req.get("judge1UserId");
     CodeSchema.parse(code);
 
@@ -22,6 +23,7 @@ export const executeCode = async (
           },
         },
         ...code,
+        callback_url,
       },
     });
 

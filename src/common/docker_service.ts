@@ -2,6 +2,7 @@ import Docker, { Container, ContainerCreateOptions } from "dockerode";
 import { CodeJob, CodeSatatusEnum } from "./typedefs/types";
 import * as constants from "../constants";
 import prisma from "./utils/db";
+import axios from "axios";
 
 class DockerService {
   code: CodeJob;
@@ -75,9 +76,14 @@ class DockerService {
       },
       data: {
         status: this.status,
-        output: this.output
+        output: this.output,
       },
     });
+  }
+
+  private async hitCallbackUrl(callbackUrl: string, data: any): Promise<void> {
+    console.log(callbackUrl)
+    await axios.post(callbackUrl, { output: data });
   }
 
   async executeCode(): Promise<string> {
@@ -115,6 +121,7 @@ class DockerService {
 
       this.output = logs;
       await this.updateCodeData();
+      await this.hitCallbackUrl(this.code.callback_url, { ...this.code, logs });
     } catch (error) {
       console.error("Error executing code:", error);
     } finally {
