@@ -70,10 +70,6 @@ class DockerService {
   }
 
   private async updateCodeData(): Promise<void> {
-    const currentTimestamp = new Date().getTime();
-    const creationTimestamp = new Date(this.code.created_at).getTime();
-    const executionTime: number = creationTimestamp - currentTimestamp;
-
     await prisma.code.update({
       where: {
         id: this.code.id,
@@ -81,7 +77,7 @@ class DockerService {
       data: {
         status: this.status,
         output: this.output,
-        execution_time: executionTime,
+        execution_time: this.code.execution_time,
       },
     });
   }
@@ -96,6 +92,7 @@ class DockerService {
     let logs = "";
 
     try {
+      const startTime = Date.now();
       container = await this.createContainer();
       await container.start();
 
@@ -125,6 +122,7 @@ class DockerService {
       }
 
       this.output = logs;
+      this.code.execution_time = (Date.now() - startTime);
       await Promise.all([
         this.updateCodeData(),
         this.hitCallbackUrl(this.code.callback_url, { ...this.code, logs, submission_id: this.code.id }),

@@ -2,11 +2,14 @@ import express, { Request, Response } from "express";
 import { ReqI } from "./params";
 import fs from "fs";
 import path from "path";
+import * as constants from '../constants';
 import prisma from "../common/utils/db";
 const app = express();
 const PORT = 5001;
 
 app.use(express.json());
+
+let startTime = 0;
 
 const resData: ReqI[] = [];
 
@@ -20,7 +23,25 @@ app.post("/catch-output", (req: Request, res: Response) => {
 });
 
 app.get("/metrics", async (req: Request, res: Response) => {
-  const codes = await prisma.code.findMany();
+  let timeE = 0;
+
+  if (startTime === 0) {
+    startTime = Date.now();
+  }
+
+  if (startTime) {
+    timeE = Date.now() - startTime;
+  }
+
+
+  const codes = await prisma.code.findMany({
+    where: {
+      execution_time: {
+        gt: 0
+      }
+    }
+  });
+  const codeCount = await prisma.code.count();
 
   let timeSum = 0;
   let len = codes.length;
@@ -30,7 +51,10 @@ app.get("/metrics", async (req: Request, res: Response) => {
   }
 
   res.json({
-    number_of_code_executed: len,
+    total_codes: codeCount,
+    executed_count: len,
+    time_elapsed: timeE,
+    worker_count: constants.MAX_WORKERS,
     average_execution_time: (timeSum/len),
     longest_execution_time: Math.max(...(codes.map(code => code.execution_time)))
   });

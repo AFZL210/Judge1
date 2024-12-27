@@ -23,7 +23,6 @@ export const executeCode = async (
           },
         },
         ...code,
-        created_at: new Date(),
         callback_url,
       },
     });

@@ -29,7 +29,7 @@ model User {
 
 model Code {
   id             String     @id @default(uuid())
-  callback_url    String     @default("")
+  callback_url   String     @default("")
   code           String
   input          String     @default("")
   output         String     @default("")
