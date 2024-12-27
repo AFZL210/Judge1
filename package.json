@@ -6,8 +6,9 @@
   "scripts": {
     "build": "tsc -p .",
     "server": "node ./dist/server/index.js",
-    "dev-client-server": "nodemon ./src/client_server.ts",
-    "client-server": "node ./dist/client_server.js",
+    "dev-client-server": "nodemon ./src/test/client_server.ts",
+    "client-server": "node ./dist/test/client_server.js",
+    "populate": "ts-node ./src/test/populate_queue.ts",
     "dev-server": "nodemon ./src/server/index.ts",
     "worker": "node ./dist/worker/worker.js",
     "dev-worker": "ts-node ./src/worker/worker.ts",

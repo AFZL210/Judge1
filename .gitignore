@@ -3,3 +3,6 @@ node_modules/
 dist/
 notes.md
 migrations
+
+src/test/req.json
+src/test/res.json
