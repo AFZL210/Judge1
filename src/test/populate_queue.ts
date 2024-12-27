@@ -38,14 +38,6 @@ const makeRequests = async () => {
   Promise.all(promises)
     .then((d: any) => {
       console.log("pushed codes to quque");
-      for (let i = 0; i < REQUESTS_COUNT; i++) {
-        reqData.push({
-          id: d[i].data.data.submission_id,
-          timestamp: new Date().getTime(),
-        });
-      }
-      const inputPath = path.join(__dirname, "req.json");
-      fs.writeFileSync(inputPath, JSON.stringify(reqData, null, 2));
     })
     .catch((err) => console.log("error pushing codes", err));
 };

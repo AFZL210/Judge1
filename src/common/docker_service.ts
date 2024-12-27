@@ -72,6 +72,7 @@ class DockerService {
   private async updateCodeData(): Promise<void> {
     const currentTimestamp = new Date().getTime();
     const creationTimestamp = new Date(this.code.created_at).getTime();
+    console.log(this.code.created_at, currentTimestamp-creationTimestamp)
     const executionTime: number = creationTimestamp - currentTimestamp;
 
     await prisma.code.update({
