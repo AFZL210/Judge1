@@ -7,10 +7,12 @@ import DockerService from "../common/docker_service";
 import cluster from "cluster";
 import os from "os";
 
-const workerCount = Math.min(os.availableParallelism(), constants.MAX_WORKERS);
+const WORKER_COUNT = Math.min(os.availableParallelism(), constants.MAX_WORKERS);
+const REDIS_HOST = process.env.REDIS_HOST!;
+const REDIS_PORT = parseInt(process.env.REDIS_PORT!);
 
 if (cluster.isPrimary) {
-  for (let i = 0; i < workerCount; i++) {
+  for (let i = 0; i < WORKER_COUNT; i++) {
     cluster.fork();
   }
 
@@ -29,6 +31,9 @@ if (cluster.isPrimary) {
   };
 
   const codeRunner = new Worker(constants.CODE_QUEUE, jobHandler, {
-    connection: {},
+    connection: {
+      host: REDIS_HOST,
+      port: REDIS_PORT,
+    },
   });
 }

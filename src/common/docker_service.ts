@@ -122,11 +122,20 @@ class DockerService {
       }
 
       this.output = logs;
-      this.code.execution_time = (Date.now() - startTime);
-      await Promise.all([
-        this.updateCodeData(),
-        this.hitCallbackUrl(this.code.callback_url, { ...this.code, logs, submission_id: this.code.id }),
-      ]);
+      this.code.execution_time = Date.now() - startTime;
+
+      const returnPromises = [this.updateCodeData()];
+      if (!!this.code.callback_url) {
+        returnPromises.push(
+          this.hitCallbackUrl(this.code.callback_url, {
+            ...this.code,
+            logs,
+            submission_id: this.code.id,
+          }),
+        );
+      }
+
+      await Promise.all(returnPromises);
     } catch (error) {
       console.error("Error executing code:", error);
     } finally {
