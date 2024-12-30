@@ -16,6 +16,16 @@ Judge1 is a code execution engine that can run C++, JavaScript, and Python code 
 - Detailed execution results
 
 
+## Benchmark
+
+Executing 100 codes in 10 seconds. The performance is not very good because of Docker startup time. The system is not suitable for building a problem-solving platform like LeetCode or GitHub but can be used to build contest-based sites like Codeforces and CodeChef.
+
+https://github.com/user-attachments/assets/b9ae7aec-e70e-49d4-8d49-1658e338da98
+
+
+
+
+
 ## Get Started
 
 Judge1 is an experimental code execution engine inspired by Judge0. It is not currently intended for production use, but you can self-host it for small-scale purposes.
