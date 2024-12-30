@@ -39,3 +39,27 @@ export const executeCode = async (
     next(createError(e as ErrorI));
   }
 };
+
+export const result = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { submission_id } = req.body;
+
+    const code = await prisma.code.findUnique({
+      where: {
+        id: submission_id,
+      },
+    });
+
+    if (!code) {
+      throw new Error("Invalid submission_id: Code not found.");
+    }
+
+    res.json(code).status(200);
+  } catch (e) {
+    next(createError(e as ErrorI));
+  }
+};
