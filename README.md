@@ -3,10 +3,6 @@
 
 Judge1 is a code execution engine that can run C++, JavaScript, and Python code in a containerized manner.
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/AFZL210/image-host/refs/heads/main/judge1-logo.png" alt="Logo">
-</div>
-
 ## Features
 
 - Sandboxed compilation and execution
