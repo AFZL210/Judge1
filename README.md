@@ -15,12 +15,6 @@ Judge1 is a code execution engine that can run C++, JavaScript, and Python code 
 - Webhooks (HTTP callbacks)
 - Detailed execution results
 
-## System Design
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/AFZL210/image-host/refs/heads/main/images/Screenshot%20from%202024-12-30%2020-11-18.png">
-</div>
-
 
 ## Benchmark
 
